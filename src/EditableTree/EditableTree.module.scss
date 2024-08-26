@@ -1,0 +1,14 @@
+.treeTitle {
+  margin-top: 0;
+  font-weight: normal;
+}
+
+.tree {
+  // background-color: #ccc;
+  border-radius: #aaa;
+}
+
+.tree :global(.bp4-tree-node-content),
+.tree :global(.bp4-tree-node-secondary-label) {
+  padding-right: 0;
+}
