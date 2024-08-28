@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../daily-stats-dashboard/src/components/Category"
+		}
+	],
+	"settings": {
+		"typescript.tsdk": "EditableTree/node_modules/typescript/lib"
+	}
+}
