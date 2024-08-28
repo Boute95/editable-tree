@@ -8,8 +8,8 @@ import styles from './EditableTree.module.scss'
 import { TreeUtils } from '../utils/Tree'
 
 type EditableTreeNodeInfo = TreeNodeInfo & {
-  edit: (node: TreeNodeInfo) => void
-  delete: (node: TreeNodeInfo) => void
+  edit?: (node: TreeNodeInfo) => void
+  delete?: (node: TreeNodeInfo) => void
 }
 
 type Props = {
