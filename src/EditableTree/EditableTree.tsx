@@ -1,5 +1,13 @@
 import React from 'react'
-import { Tree, TreeEventHandler, TreeNodeInfo } from '@blueprintjs/core'
+import {
+  Button,
+  ButtonGroup,
+  Classes,
+  Popover,
+  Tree,
+  TreeEventHandler,
+  TreeNodeInfo,
+} from '@blueprintjs/core'
 import 'normalize.css'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
@@ -8,24 +16,39 @@ import styles from './EditableTree.module.scss'
 import { TreeUtils } from '../utils/Tree'
 
 type EditableTreeNodeInfo = TreeNodeInfo & {
-  edit?: (node: TreeNodeInfo) => void
-  delete?: (node: TreeNodeInfo) => void
+  isFreshlyAdded?: false
 }
 
 type Props = {
-  data: EditableTreeNodeInfo[]
+  tree: EditableTreeNodeInfo[]
+  className?: string,
   isFullyExpanded?: boolean
+  contentEditNode?: (node: EditableTreeNodeInfo) => React.JSX.Element
+  contentRemoveNode?: (node: EditableTreeNodeInfo) => React.JSX.Element
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-const EditableTree: React.FC<Props> = ({ data, isFullyExpanded }) => {
-  const [treeData, setTreeData] = React.useState<EditableTreeNodeInfo[]>(data)
+const EditableTree: React.FC<Props> = ({
+  tree,
+  className,
+  isFullyExpanded = true,
+  contentEditNode,
+  contentRemoveNode,
+}) => {
+  const [treeData, setTreeData] = React.useState<EditableTreeNodeInfo[]>(tree)
 
   React.useEffect(() => {
-    if (isFullyExpanded) {
-      setTreeData(applyExpandOnTree(treeData, isFullyExpanded))
-    }
+    setTreeData(applyExpandOnTree(treeData, isFullyExpanded))
   }, [isFullyExpanded])
+
+  React.useEffect(() => {
+    setTreeData(
+      applyExpandOnTree(
+        stylizeTree(tree, contentEditNode, contentRemoveNode),
+        isFullyExpanded
+      )
+    )
+  }, [tree])
 
   const onClick: TreeEventHandler = (node, path) => {
     const newTree = [...treeData]
@@ -35,7 +58,7 @@ const EditableTree: React.FC<Props> = ({ data, isFullyExpanded }) => {
   }
 
   return (
-    <div>
+    <div className={className ?? ''}>
       <Tree
         className={styles.tree}
         contents={treeData}
@@ -61,6 +84,55 @@ function applyExpandOnTree(
     { childNodes: tree },
     (node) => ((node as EditableTreeNodeInfo).isExpanded = isExpanded)
   )
+  return newTree
+}
+
+///////////////////////////////////////////////////////////////////////////////
+function stylizeTree(
+  tree: EditableTreeNodeInfo[],
+  contentEditNode?: (node: EditableTreeNodeInfo) => React.JSX.Element,
+  contentRemoveNode?: (node: EditableTreeNodeInfo) => React.JSX.Element
+) {
+  if (!tree) {
+    return tree
+  }
+
+  let newTree = [...tree]
+  const rootTree = { id: -1, label: '', childNodes: newTree }
+  TreeUtils.walk(rootTree, (child) => {
+    const node = child as EditableTreeNodeInfo
+    if (node.isFreshlyAdded) {
+      node.className = styles.freshlyAddedNode
+    }
+    if (contentEditNode || contentRemoveNode) {
+      node.secondaryLabel = (
+        <ButtonGroup minimal>
+          {contentEditNode && (
+            <Popover
+              content={contentEditNode(node)}
+              popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+            >
+              <Button
+                icon="edit"
+                onClick={(e) => (node.isExpanded = !node.isExpanded)}
+              />
+            </Popover>
+          )}
+          {contentRemoveNode && (
+            <Popover
+              content={contentRemoveNode(node)}
+              popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+            >
+              <Button
+                icon="cross"
+                onClick={(e) => (node.isExpanded = !node.isExpanded)}
+              />
+            </Popover>
+          )}
+        </ButtonGroup>
+      )
+    }
+  })
   return newTree
 }
 

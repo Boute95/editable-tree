@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { Button } from '@blueprintjs/core'
+import React from 'react'
 
 import EditableTree from './EditableTree'
 
@@ -13,7 +15,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     isFullyExpanded: true,
-    data: [
+    contentEditNode: (e) => (<Button>Edit me</Button>),
+    contentRemoveNode: (e) => (<Button>Remove me</Button>),
+    tree: [
       {
         id: 0,
         label: 'Nanou',
