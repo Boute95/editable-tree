@@ -1,6 +1,6 @@
 {
   "name": "@boute/editable-tree",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "source": "src/index.tsx",
   "main": "cjs/index.js",
   "module": "esm/index.js",
