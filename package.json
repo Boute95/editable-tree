@@ -2,8 +2,9 @@
   "name": "@boute/editable-tree",
   "version": "1.0.4",
   "source": "src/index.tsx",
-  "main": "cjs/index.js",
-  "module": "esm/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",

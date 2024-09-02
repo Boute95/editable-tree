@@ -9,12 +9,12 @@ export default {
   input: 'src/index.tsx',
   output: [
     {
-      file: 'esm/index.js',
+      file: 'dist/esm/index.js',
       format: 'esm', 
       sourcemap: true,
     },
     {
-      file: 'cjs/index.js',
+      file: 'dist/cjs/index.js',
       format: 'cjs',
       sourcemap: true,
       name: 'react-lib',
