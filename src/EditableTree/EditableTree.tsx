@@ -17,7 +17,7 @@ import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import styles from './EditableTree.module.scss'
 import { TreeUtils } from '../utils/Tree'
 
-type EditableTreeNodeInfo = TreeNodeInfo & {
+export type EditableTreeNodeInfo = TreeNodeInfo & {
   isFreshlyAdded?: false
 }
 
