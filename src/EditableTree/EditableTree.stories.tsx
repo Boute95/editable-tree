@@ -51,3 +51,44 @@ export const Default: Story = {
     ],
   },
 }
+
+export const ClickCallback: Story = {
+  args: {
+    isFullyExpanded: true,
+    onEditClick: () => console.log('Editing node'),
+    onRemoveClick: () => console.log('Removing node'),
+    tree: [
+      {
+        id: 0,
+        label: 'Nanou',
+        childNodes: [
+          {
+            id: 1,
+            label: 'Maman',
+            childNodes: [
+              {
+                id: 2,
+                label: 'Nana',
+              },
+            ],
+          },
+          {
+            id: 3,
+            label: 'Papa',
+            childNodes: [
+              {
+                id: 4,
+                label: 'Mémé',
+              },
+              {
+                id: 5,
+                label: 'Papi Fabrice',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+}
+

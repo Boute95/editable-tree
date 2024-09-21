@@ -23,10 +23,12 @@ export type EditableTreeNodeInfo = TreeNodeInfo & {
 
 type Props = {
   tree: EditableTreeNodeInfo[]
-  className?: string,
+  className?: string
   isFullyExpanded?: boolean
   contentEditNode?: (node: EditableTreeNodeInfo) => React.JSX.Element
+  onEditClick?: () => void
   contentRemoveNode?: (node: EditableTreeNodeInfo) => React.JSX.Element
+  onRemoveClick?: () => void
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,7 +37,9 @@ const EditableTree: React.FC<Props> = ({
   className,
   isFullyExpanded = true,
   contentEditNode,
+  onEditClick,
   contentRemoveNode,
+  onRemoveClick,
 }) => {
   const [treeData, setTreeData] = React.useState<EditableTreeNodeInfo[]>(tree)
 
@@ -46,7 +50,13 @@ const EditableTree: React.FC<Props> = ({
   React.useEffect(() => {
     setTreeData(
       applyExpandOnTree(
-        stylizeTree(tree, contentEditNode, contentRemoveNode),
+        stylizeTree(
+          tree,
+          contentEditNode,
+          onEditClick,
+          contentRemoveNode,
+          onRemoveClick
+        ),
         isFullyExpanded
       )
     )
@@ -93,7 +103,9 @@ function applyExpandOnTree(
 function stylizeTree(
   tree: EditableTreeNodeInfo[],
   contentEditNode?: (node: EditableTreeNodeInfo) => React.JSX.Element,
-  contentRemoveNode?: (node: EditableTreeNodeInfo) => React.JSX.Element
+  onEditClick?: () => void,
+  contentRemoveNode?: (node: EditableTreeNodeInfo) => React.JSX.Element,
+  onRemoveClick?: () => void
 ) {
   if (!tree) {
     return tree
@@ -106,8 +118,32 @@ function stylizeTree(
     if (node.isFreshlyAdded) {
       node.className = styles.freshlyAddedNode
     }
-    if (contentEditNode || contentRemoveNode) {
+    if (contentEditNode || contentRemoveNode || onEditClick || onRemoveClick) {
       node.secondaryLabel = (
+        // <ButtonGroup minimal>
+        //   {(contentEditNode || onEditClick) && (
+        //     <Popover
+        //       content={contentEditNode && contentEditNode(node)}
+        //       popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+        //     >
+        //       <Button
+        //         icon="edit"
+        //         onClick={(e) => (node.isExpanded = !node.isExpanded)}
+        //       />
+        //     </Popover>
+        //   )}
+        //   {(contentRemoveNode || onRemoveClick) && (
+        //     <Popover
+        //       content={contentRemoveNode && contentRemoveNode(node)}
+        //       popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+        //     >
+        //       <Button
+        //         icon="cross"
+        //         onClick={(e) => (node.isExpanded = !node.isExpanded)}
+        //       />
+        //     </Popover>
+        //   )}
+        // </ButtonGroup>
         <ButtonGroup minimal>
           {contentEditNode && (
             <Popover
@@ -116,9 +152,20 @@ function stylizeTree(
             >
               <Button
                 icon="edit"
-                onClick={(e) => (node.isExpanded = !node.isExpanded)}
+                onClick={() => {
+                  node.isExpanded = !node.isExpanded
+                }}
               />
             </Popover>
+          )}
+          {onEditClick && (
+            <Button
+              icon="edit"
+              onClick={(e) => {
+                node.isExpanded = !node.isExpanded
+                onEditClick()
+              }}
+            />
           )}
           {contentRemoveNode && (
             <Popover
@@ -127,9 +174,20 @@ function stylizeTree(
             >
               <Button
                 icon="cross"
-                onClick={(e) => (node.isExpanded = !node.isExpanded)}
+                onClick={() => {
+                  node.isExpanded = !node.isExpanded
+                }}
               />
             </Popover>
+          )}
+          {onRemoveClick && (
+            <Button
+              icon="cross"
+              onClick={(e) => {
+                node.isExpanded = !node.isExpanded
+                onRemoveClick()
+              }}
+            />
           )}
         </ButtonGroup>
       )
