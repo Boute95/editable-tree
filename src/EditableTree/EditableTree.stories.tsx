@@ -55,8 +55,8 @@ export const Default: Story = {
 export const ClickCallback: Story = {
   args: {
     isFullyExpanded: true,
-    onEditClick: () => console.log('Editing node'),
-    onRemoveClick: () => console.log('Removing node'),
+    onEditClick: (node) => console.log(`Editing node: ${node.label}`),
+    onRemoveClick: (node) => console.log(`Removing node: ${node.label}`),
     tree: [
       {
         id: 0,

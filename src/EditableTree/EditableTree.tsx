@@ -26,9 +26,9 @@ type Props = {
   className?: string
   isFullyExpanded?: boolean
   contentEditNode?: (node: EditableTreeNodeInfo) => React.JSX.Element
-  onEditClick?: () => void
+  onEditClick?: (node: EditableTreeNodeInfo) => void
   contentRemoveNode?: (node: EditableTreeNodeInfo) => React.JSX.Element
-  onRemoveClick?: () => void
+  onRemoveClick?: (node: EditableTreeNodeInfo) => void
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,9 +103,9 @@ function applyExpandOnTree(
 function stylizeTree(
   tree: EditableTreeNodeInfo[],
   contentEditNode?: (node: EditableTreeNodeInfo) => React.JSX.Element,
-  onEditClick?: () => void,
+  onEditClick?: (node: EditableTreeNodeInfo) => void,
   contentRemoveNode?: (node: EditableTreeNodeInfo) => React.JSX.Element,
-  onRemoveClick?: () => void
+  onRemoveClick?: (node: EditableTreeNodeInfo) => void
 ) {
   if (!tree) {
     return tree
@@ -163,7 +163,7 @@ function stylizeTree(
               icon="edit"
               onClick={(e) => {
                 node.isExpanded = !node.isExpanded
-                onEditClick()
+                onEditClick(node)
               }}
             />
           )}
@@ -185,7 +185,7 @@ function stylizeTree(
               icon="cross"
               onClick={(e) => {
                 node.isExpanded = !node.isExpanded
-                onRemoveClick()
+                onRemoveClick(node)
               }}
             />
           )}
